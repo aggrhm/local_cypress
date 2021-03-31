@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'yaml'
+
+session = ARGV[0]
+config = YAML.load_file("./config.yml")[session]
+host = config['host']
+remote_dir = config['project_path']
+local_dir = './project'
+
+wait_cmd = "inotifywait -r #{remote_dir}/cypress.json -e modify -e create -e delete #{remote_dir}/cypress.env.json #{remote_dir}/cypress"
+delay = 1
+system("mkdir -p #{local_dir}")
+
+thr = Thread.new do
+  loop do
+    # sync files
+    puts "Syncing cypress files."
+    ret = system("rsync -avzh #{host}:#{remote_dir}/cypress* #{local_dir}")
+    if !ret
+      puts "Error syncing directory. Waiting #{delay} seconds..."
+      sleep delay
+      delay = delay * 2
+    else
+      delay = 1
+    end
+    # wait for changes
+    ret = system("ssh #{host} \"#{wait_cmd}\"")
+    if ret
+      puts "Detected cypress changes"
+    end
+  end
+end
+
+# start program
+system("npx cypress open --project ./project")
