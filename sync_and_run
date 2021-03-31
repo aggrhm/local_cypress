@@ -8,7 +8,7 @@ host = config['host']
 remote_dir = config['project_path']
 local_dir = './project'
 
-wait_cmd = "inotifywait -r #{remote_dir}/cypress.json -e modify -e create -e delete #{remote_dir}/cypress.env.json #{remote_dir}/cypress"
+wait_cmd = "inotifywait -r -e modify -e create -e delete #{remote_dir}/cypress.json #{remote_dir}/cypress.env.json #{remote_dir}/cypress"
 delay = 1
 system("mkdir -p #{local_dir}")
 
