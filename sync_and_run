@@ -6,6 +6,7 @@ session = ARGV[0]
 config = YAML.load_file("./config.yml")[session]
 host = config['host']
 remote_dir = config['project_path']
+run_cmd = config['run']
 local_dir = './project'
 
 wait_cmd = "inotifywait -r -e modify -e create -e delete #{remote_dir}/cypress.json #{remote_dir}/cypress.env.json #{remote_dir}/cypress"
@@ -33,4 +34,5 @@ thr = Thread.new do
 end
 
 # start program
-system("npx cypress open --project ./project")
+puts "Running command: #{run_cmd}"
+system(run_cmd)

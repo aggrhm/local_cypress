@@ -1,3 +1,5 @@
 phamily_cypress:
   host: alan@home.safemonit.com
-  project_path: '/home/alan/Projects/web/phamily-rails'
+  project_path: /home/alan/Projects/web/phamily-rails
+  #run: 'npx cypress open --project ./project --config watchForFileChanges=false,baseUrl=http://home.local:3000'
+  run: 'npx cypress open --project ./project --config watchForFileChanges=false,baseUrl=http://dev.phamily.com'
